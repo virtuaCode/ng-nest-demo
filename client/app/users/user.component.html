@@ -1,0 +1,16 @@
+<div class="ui three column grid">
+  <div class="column" *ngFor="let user of users">
+    <div class="ui link fluid card" (click)="onSelect(user)" [class.selected]="user === selectedUser">
+      <!-- each fruit goes here -->
+      <div class="content">
+        <a class="header">{{user.displayname}}</a>
+        <div class="meta">
+          Member since {{user.created | date}}
+        </div>
+      </div>
+      <div class="content extra">
+        User ID: {{user.id}}
+      </div>
+    </div>
+  </div>
+</div>

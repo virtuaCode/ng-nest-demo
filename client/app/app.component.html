@@ -1,0 +1,31 @@
+<div class="ui inverted fixed menu">
+  <div class="ui container">
+    <a class="item header" routerLink="/">
+      <img class="logo" src="assets/logo.png" alt="Logo"/>
+      Brand
+    </a>
+    <a class="item" routerLinkActive="active" routerLink="/home">Home</a>
+    <a class="item" *ngIf="isLoggedIn | async" routerLinkActive="active" routerLink="/users">Users</a>
+    <div class="right menu">
+
+      <div class="ui pointing dropdown link item" *ngIf="isLoggedIn | async" suiDropdown>
+        <span class="text">Account</span>
+        <i class="dropdown icon"></i>
+        <div class="menu" suiDropdownMenu>
+          <div class="item" routerLink="/settings">Settings</div>
+          <div class="divider"></div>
+          <div class="item" (click)="logout()">Logout</div>
+        </div>
+      </div>
+      <div class="item" *ngIf="!(isLoggedIn | async)">
+        <div class="ui inverted button" routerLinkActive="active" routerLink="/login">Login</div>
+      </div>
+      <div class="item" *ngIf="!(isLoggedIn | async)">
+        <div class="ui teal button" routerLinkActive="active" routerLink="/register">Sign Up</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ui main container">
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,73 @@
+<div class="ui two column container stackable centered grid">
+  <div class="column">
+    <div class="ui segment">
+      <div class="ui one column grid">
+        <div class="column">
+          <h1>Create Account</h1>
+          <sui-message *ngIf="registerError" class="error" [isDismissable]="false">
+            <div class="header">
+              Registration failed!
+            </div>
+            <p>{{registerError?.message}}</p>
+          </sui-message>
+        </div>
+        <div class="column">
+          <form class="ui form" (ngSubmit)="onSubmit(form)" [formGroup]="form">
+            <div class="field" [class.error]="!displayname.valid && (displayname.dirty || displayname.touched)">
+              <label>Display Name</label>
+              <input #nameInput type="text" name="displayname" formControlName="displayname" placeholder="Name">
+              <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!displayname.valid && (displayname.dirty || displayname.touched)">
+                <div class="ui bulleted list">
+                  <div class="item" *ngIf="displayname.hasError('maxlength')">
+                    Display name can not be longer than 25 characters!
+                  </div>
+                  <div class="item" *ngIf="displayname.hasError('containsSpace')">
+                    Display name can not contain spaces!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field required" [class.error]="!username.valid && (username.dirty || username.touched)">
+              <label>Username</label>
+              <input #nameInput type="text" name="username" formControlName="username" required placeholder="username">
+              <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!username.valid && (username.dirty || username.touched)">
+                <div class="ui bulleted list">
+                  <div class="item" *ngIf="username.hasError('required')">
+                    Username is required!
+                  </div>
+                  <div class="item" *ngIf="username.hasError('pattern')">
+                    Only alphanumeric characters are allowed!
+                  </div>
+                  <div class="item" *ngIf="username.hasError('minlength')">
+                    Username must be at least 5 characters long!
+                  </div>
+                  <div class="item" *ngIf="username.hasError('maxlength')">
+                    Username can not be longer than 25 characters!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field required" [class.error]="!password.valid && (password.dirty || password.touched)">
+              <label>Password</label>
+              <input #passwordInput type="password" name="password" formControlName="password" required placeholder="password">
+              <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!password.valid && (password.dirty || password.touched)">
+                <div class="ui bulleted list">
+                  <div class="item" *ngIf="password.hasError('required')">
+                    Password is required!
+                  </div>
+                  <div class="item" *ngIf="password.hasError('minlength')">
+                    Password must be at least 8 characters long!
+                  </div>
+                  <div class="item" *ngIf="password.hasError('maxlength')">
+                    Password can not be longer than 64 characters!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="ui button primary fluid" type="submit" [disabled]="!form.valid">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="ui two column container stackable centered grid">
+  <div class="column">
+    <div class="ui segment">
+      <div class="ui one column grid">
+        <div class="column">
+          <h1>User Login</h1>
+          <sui-message *ngIf="loginError" class="error" [isDismissable]="false">
+            <div class="header">
+              Login failed!
+            </div>
+            <p>{{loginError?.message}}</p>
+          </sui-message>
+        </div>
+        <div class="column">
+          <form class="ui form" (ngSubmit)="onSubmit(form)" [formGroup]="form">
+            <div class="field required" [class.error]="!username.valid && (username.dirty || username.touched)">
+              <div class="ui left icon input">
+                <input #usernameInput type="text" name="username" formControlName="username" required placeholder="username">
+                <i class="user icon"></i>
+              </div>
+              <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!username.valid && (username.dirty || username.touched)">
+                <div class="ui bulleted list">
+                  <div class="item" *ngIf="username.hasError('required')">
+                    Please enter your username!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="field required" [class.error]="!password.valid && (password.dirty || password.touched)">
+              <div class="ui left icon input">
+                <input #passwordInput type="password" name="password" formControlName="password" required placeholder="password">
+                <i class="lock icon"></i>
+              </div>
+              <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!password.valid && (password.dirty || password.touched)">
+                <div class="ui bulleted list">
+                  <div class="item" *ngIf="password.hasError('required')">
+                    Please enter your password!
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui divider"></div>
+            <button class="ui button primary fluid" type="submit" [disabled]="!form.valid">Log in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
