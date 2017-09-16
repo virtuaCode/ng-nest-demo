@@ -1,1 +1,15 @@
-<p>profile works!</p>
+<form *ngIf="profile" class="ui form" (ngSubmit)="onSubmit(form)" [formGroup]="form">
+    <div class="field" [class.error]="!displayname.valid && (displayname.dirty || displayname.touched)">
+        <label>Display Name</label>
+        <input [(ngModel)]="profile.displayname"  type="text" formControlName="displayname" placeholder="Name">
+    </div>
+    <div class="field" [class.error]="!homepage.valid && (homepage.dirty || homepage.touched)">
+        <label>Homepage</label>
+        <input [(ngModel)]="profile.homepage" type="url" formControlName="homepage" placeholder="example.com">
+    </div>
+    <div class="field" [class.error]="!luckynumber.valid && (luckynumber.dirty || luckynumber.touched)">
+        <label>Lucky Number</label>
+        <input [(ngModel)]="profile.luckynumber" name="luckynumber" type="number" formControlName="luckynumber" placeholder="Number">
+    </div>
+    <button class="ui button success" type="submit">Save</button>
+</form>

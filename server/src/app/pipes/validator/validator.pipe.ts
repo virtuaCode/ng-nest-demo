@@ -6,7 +6,10 @@ import { ValidationException } from "../../exceptions/validation.exception";
 @Pipe()
 export class ValidatorPipe implements PipeTransform<any> {
   public async transform(value, metadata: ArgumentMetadata) {
-    const { metatype } = metadata;
+    if(metadata.metatype === undefined)
+      throw new Error("Metatype is not defined");
+    
+    const metatype: (new (...args: any[]) => any) = metadata.metatype;
 
     if (!this.toValidate(metatype)) {
       return value;
@@ -20,7 +23,7 @@ export class ValidatorPipe implements PipeTransform<any> {
     return value;
   }
 
-  private toValidate(metatype = null): boolean {
+  private toValidate(metatype): boolean {
     const types = [String, Boolean, Number, Array, Object];
     return !types.find((type) => metatype === type);
   }

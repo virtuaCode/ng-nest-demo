@@ -2,12 +2,11 @@ import * as jwt from 'jsonwebtoken';
 import { Component, HttpStatus, UsePipes } from "@nestjs/common";
 import { HttpException } from "@nestjs/core";
 import { UserService } from "../user/user.service";
-import { User } from "../../models/user";
 import * as bcrypt from "bcrypt";
-import { IUserModel } from "../../schemas/user.schema";
-import { LoginDto } from "../../dto/login.dto";
-import { TokenDto } from "../../dto/token.dto";
-import { RegisterDto } from "../../dto/register.dto";
+import { User } from '../../entities/user.entity';
+import { LoginRequest } from '../../transfer/login.request';
+import { TokenResponse } from '../../transfer/token.response';
+import { RegisterRequest } from '../../transfer/register.request';
 
 const JWT_KEY: string = process.env.JWT_KEY || "secret";
 const SALT_ROUNDS: number = process.env.SALT_ROUNDS || 12;
@@ -18,48 +17,49 @@ export class AuthService {
 
   constructor(private userService: UserService) { }
 
-  async login(login: LoginDto): Promise<TokenDto> {
+  async login(login: LoginRequest): Promise<TokenResponse> {
 
+    console.log(login);
+    
     const lowerName = login.username.toLowerCase();
 
-    const user: IUserModel = await this.userService.getUserByName(lowerName);
+    console.log("lowercase success");
 
+    const user = await this.userService.getByUsername(lowerName);
     if (!user) throw new HttpException("User Authentication failed", 401);
 
+    console.log(user);
 
     const valid: boolean = await this.checkPassword(login.password, user.password);
-
     if (!valid) throw new HttpException("User Authentication failed", 401);
 
     return await this.createToken(user);
   }
 
 
-  async register(registerDto: RegisterDto): Promise<TokenDto> {
+  async register(register: RegisterRequest): Promise<TokenResponse> {
 
-    if (registerDto.displayname.length === 0)
-      registerDto.displayname = registerDto.username;
+    const hash = await this.hashPassword(register.password);
 
-    const hash = await this.hashPassword(registerDto.password);
+    const newUser: User = new User(register.username, register.displayname, hash);
 
-    const user: User = {
-      username: registerDto.username,
-      displayname: registerDto.displayname,
-      password: hash,
-      created: new Date()
+    let savedUser;
+    try {
+      savedUser = await this.userService.add(newUser);
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY')
+        throw new HttpException("Username already taken", HttpStatus.CONFLICT)
+      throw error;
     }
 
-    const doc = await this.userService.addUser(user);
-
-    return await this.createToken(doc);
+    return await this.createToken(savedUser);
   }
 
-  private async createToken(user: IUserModel): Promise<TokenDto> {
-    const id: string = user.id;
+  private async createToken(user: User): Promise<TokenResponse> {
+    const id: number = user.id;
     const username: string = user.username;
 
-    const token = await this.signJwt(id, username);
-    return token;
+    return await this.signJwt(id, username);;
   }
 
   private hashPassword(password): Promise<string> {
@@ -84,7 +84,7 @@ export class AuthService {
     });
   }
 
-  private signJwt(id: string, username: string): Promise<TokenDto> {
+  private signJwt(id: number, username: string): Promise<TokenResponse> {
     return new Promise((resolve, reject) => {
       jwt.sign({ id, username }, JWT_KEY, function (err, token) {
         if (err)

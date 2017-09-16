@@ -2,41 +2,51 @@ import { Component } from '@nestjs/common';
 import { HttpException } from '@nestjs/core';
 
 import * as bcrypt from "bcrypt";
-import { Users, IUserModel } from "../../schemas/user.schema";
-import { User } from "../../models/user";
-import { RegisterDto } from "../../dto/register.dto";
+import { User } from "../../entities/user.entity";
 import { UserExistsException } from "../../exceptions/user-exists.exception";
+import { Service } from '../../interfaces/service.interface';
+import { TypeOrmDatabaseService } from '../typeorm-database/typeorm-database.service';
+import { Repository } from 'typeorm';
+
 
 @Component()
-export class UserService {
+export class UserService implements Service<User> {
 
-  public async getAllUsers(): Promise<IUserModel[]> {
-    const users = Users.find().exec();
-    return users;
-  }
+    constructor(private databaseService: TypeOrmDatabaseService) { }
 
-  public async getUserById(id: number): Promise<IUserModel> {
-    const user = Users.findById(id).exec();
-    return user;
-  }
-
-  public async getUserByName(username: string): Promise<IUserModel> {
-    const user = Users.findOne({ username: username }).exec();
-    return user;
-  }
-
-  public async addUser(user: User): Promise<IUserModel> {
-    let doc;
-
-    try {
-      doc = await Users.create(user);
-    } catch (error) {
-      if (error.name === 'MongoError' && error.code === 11000)
-        throw new UserExistsException();
-      else
-        throw error;
+    private get repository(): Promise<Repository<User>> {
+        return this.databaseService.getRepository(User);
     }
-    
-    return doc;
-  }
+
+    // C
+    public async add(user: User): Promise<User> {
+        return (await this.repository).persist(user);
+    }
+
+    public async addAll(users: User[]): Promise<User[]> {
+        return (await this.repository).persist(users);
+    }
+
+    // R
+    public async getAll(): Promise<User[]> {
+        return (await this.repository).find();
+    }
+
+    public async get(id: number): Promise<User | undefined> {
+        return (await this.repository).findOneById(id);
+    }
+
+    public async getByUsername(username: string): Promise<User | undefined>  {
+        return (await this.repository).findOne({username});
+    }
+
+    // U
+    public async update(user: User): Promise<User> {
+        return (await this.repository).persist(user);
+    }
+
+    // D
+    public async remove(user: User): Promise<User> {
+        return (await this.repository).remove(user);
+    }
 }

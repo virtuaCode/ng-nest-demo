@@ -1,6 +1,6 @@
 import { Injectable, ChangeDetectorRef } from '@angular/core'
 import { Headers, Http, Response } from '@angular/http'
-import { tokenNotExpired } from 'angular2-jwt';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { User } from "./user"
 import { HttpClient } from "@angular/common/http";
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
@@ -17,6 +17,7 @@ export class AuthService {
 
   loggedInSubject: BehaviorSubject<boolean>;
   loggedIn: Observable<boolean>;
+  jwtHelper: JwtHelper = new JwtHelper();
 
   baseUrl = "/api/auth/"
 
@@ -60,6 +61,15 @@ export class AuthService {
   logout() {
     localStorage.removeItem("token");
     this.loggedInSubject.next(false);
+  }
+
+  getUserId(): number | undefined {
+    const token = localStorage.getItem("token");
+
+    if(token === null)
+      return undefined;
+    
+    return this.jwtHelper.decodeToken(token).id;
   }
 
   private hasToken() {
