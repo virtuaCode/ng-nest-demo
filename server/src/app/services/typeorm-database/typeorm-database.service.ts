@@ -28,7 +28,6 @@ export class TypeOrmDatabaseService {
             this._connection = connection;
             return connection;
         }).catch(error => {
-            console.log(error);
             throw error;
         });
     }

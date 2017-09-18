@@ -18,17 +18,11 @@ export class AuthService {
   constructor(private userService: UserService) { }
 
   async login(login: LoginRequest): Promise<TokenResponse> {
-
-    console.log(login);
     
     const lowerName = login.username.toLowerCase();
 
-    console.log("lowercase success");
-
     const user = await this.userService.getByUsername(lowerName);
     if (!user) throw new HttpException("User Authentication failed", 401);
-
-    console.log(user);
 
     const valid: boolean = await this.checkPassword(login.password, user.password);
     if (!valid) throw new HttpException("User Authentication failed", 401);
@@ -59,7 +53,7 @@ export class AuthService {
     const id: number = user.id;
     const username: string = user.username;
 
-    return await this.signJwt(id, username);;
+    return await this.signJwt(id, username);
   }
 
   private hashPassword(password): Promise<string> {

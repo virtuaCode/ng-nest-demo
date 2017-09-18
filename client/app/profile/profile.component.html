@@ -1,15 +1,77 @@
-<form *ngIf="profile" class="ui form" (ngSubmit)="onSubmit(form)" [formGroup]="form">
-    <div class="field" [class.error]="!displayname.valid && (displayname.dirty || displayname.touched)">
+<div class="ui one column grid">
+
+  <div class="column" *ngIf="saved">
+    <sui-message  class="positive" [isDismissable]="false">
+      <div class="header">
+        Success
+      </div>
+      <p>Your profile was saved!</p>
+    </sui-message>
+  </div>
+
+  <div class="column" *ngIf="apiError">
+    <sui-message  class="error" [isDismissable]="false">
+      <div class="header">
+        Error
+      </div>
+      <p>Failed to load data!</p>
+    </sui-message>
+  </div>
+
+  <div class="column" *ngIf="submitError">
+    <sui-message class="error" [isDismissable]="false">
+      <div class="header">
+        Failed to save profile!
+      </div>
+      <p>{{submitError?.message}}</p>
+    </sui-message>
+  </div>
+
+  <div class="column">
+    <form *ngIf="profile" class="ui form" (ngSubmit)="onSubmit(form)" [formGroup]="form">
+      <div class="field" [class.error]="!displayname.valid && (displayname.dirty || displayname.touched)">
         <label>Display Name</label>
-        <input [(ngModel)]="profile.displayname"  type="text" formControlName="displayname" placeholder="Name">
-    </div>
-    <div class="field" [class.error]="!homepage.valid && (homepage.dirty || homepage.touched)">
-        <label>Homepage</label>
+        <input [(ngModel)]="profile.displayname" type="text" formControlName="displayname" placeholder="Name">
+        <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!displayname.valid && (displayname.dirty || displayname.touched)">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="displayname.hasError('maxlength')">
+              Display Name can not be longer than 25 characters
+            </div>
+            <div class="item" *ngIf="displayname.hasError('notContain')">
+              Display Name can not contain spaces
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field" [class.error]="!homepage.valid && (homepage.dirty || homepage.touched)">
+        <label>Homepage URL</label>
         <input [(ngModel)]="profile.homepage" type="url" formControlName="homepage" placeholder="example.com">
-    </div>
-    <div class="field" [class.error]="!luckynumber.valid && (luckynumber.dirty || luckynumber.touched)">
+        <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!homepage.valid && (homepage.dirty || homepage.touched)">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="homepage.hasError('isUrl')">
+              Homepage URL must be a valid URL
+            </div>
+            <div class="item" *ngIf="homepage.hasError('maxlength')">
+              Homepage URL can not be longer than 255 characters
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field" [class.error]="!luckynumber.valid && (luckynumber.dirty || luckynumber.touched)">
         <label>Lucky Number</label>
         <input [(ngModel)]="profile.luckynumber" name="luckynumber" type="number" formControlName="luckynumber" placeholder="Number">
-    </div>
-    <button class="ui button success" type="submit">Save</button>
-</form>
+        <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!luckynumber.valid && (luckynumber.dirty || luckynumber.touched)">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="luckynumber.hasError('isInt')">
+              Lucky Number has to be an integer
+            </div>
+            <div class="item" *ngIf="luckynumber.hasError('range')">
+              Lucky Number has to be between -100000 and 100000
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="ui button primary" type="submit" [disabled]="!form.valid || !form.dirty">Save</button>
+    </form>
+  </div>
+</div>

@@ -5,8 +5,8 @@ import { UserInterceptor } from "../../interceptors/user.interceptor";
 import { User } from '../../entities/user.entity';
 import { ProfileRequest } from '../../transfer/profile.request';
 import { NotFoundException } from '../../exceptions/notfound.exception';
-import { ProfileResponse } from '../../transfer/profile.response';
 import { ValidatorPipe } from '../../pipes/validator/validator.pipe';
+import { ProfileInterceptor } from '../../interceptors/profile.interceptor';
 
 @Controller('users')
 @Dependencies(UserService)
@@ -36,21 +36,21 @@ export class UserController {
 
     @Get(':id/profile')
     @HttpCode(HttpStatus.ACCEPTED)
-    public async getUserProfile( @Param("id") id): Promise<ProfileResponse> {
+    @UseInterceptors(ProfileInterceptor)
+    public async getUserProfile( @Param("id") id): Promise<User> {
 
         let user = await this.userService.get(+id);
 
         if (user === undefined) throw new NotFoundException();
 
-        const { displayname, homepage, luckynumber } = user;
-
-        return { displayname, homepage, luckynumber };
+        return user;
     }
 
     @Put(':id/profile')
     @HttpCode(HttpStatus.ACCEPTED)
     @UsePipes(new ValidatorPipe())
-    public async putUserProfile( @Param("id") id, @Body() profile: ProfileRequest): Promise<ProfileResponse> {
+    @UseInterceptors(ProfileInterceptor)
+    public async putUserProfile( @Param("id") id, @Body() profile: ProfileRequest): Promise<User> {
 
         let user = await this.userService.get(+id);
 
@@ -60,8 +60,6 @@ export class UserController {
         user.luckynumber = profile.luckynumber;
         user.homepage = profile.homepage;
 
-        const { displayname, homepage, luckynumber } = await this.userService.update(user);
-
-        return { displayname, homepage, luckynumber };
+        return await this.userService.update(user);
     }
 }

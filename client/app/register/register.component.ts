@@ -4,16 +4,8 @@ import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from
 import { HttpClient, HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { UserCreate } from "../user-create";
 import { AuthService } from "../auth.service";
+import { CustomValidators } from "../custom.validators";
 import { Router } from "@angular/router";
-
-function contains(text: string, errorType: string) {
-  return function (input: FormControl) {
-    return input.value.includes(" ") ?
-      { [errorType]: true } :
-      null;
-
-  };
-}
 
 @Component({
   selector: 'app-register',
@@ -42,7 +34,7 @@ export class RegisterComponent implements OnInit {
         "",
         [
           Validators.maxLength(25), 
-          contains(" ", "containsSpace")
+          CustomValidators.notContains([" "])
         ]
       ],
       username: [

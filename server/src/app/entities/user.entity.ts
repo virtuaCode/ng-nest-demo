@@ -2,7 +2,14 @@ import { Entity, PrimaryColumn, Column, PrimaryGeneratedColumn, Index } from "ty
 import { Exclude, Expose } from "class-transformer";
 
 
+export const Groups = {
+    USER: { groups: ["user"] },
+    PROFILE: { groups: ["profile"]},
+    USER_PROFILE: {groups: ["user","profile"]}
+}
+
 @Entity()
+@Exclude()
 export class User {
 
     constructor(username: string, displayname: string, password: string) {
@@ -12,30 +19,33 @@ export class User {
         this.created = new Date();
     }
 
+    @Expose(Groups.USER_PROFILE)
     @PrimaryGeneratedColumn()
     readonly id: number;
 
+    @Expose(Groups.USER)
     @Column({ unique: true })
     readonly username: string;
 
-    @Exclude()
     @Column({ nullable: true })
     private _displayname: string;
 
-    @Exclude()
     @Column()
     password: string;
 
+    @Expose(Groups.USER)
     @Column()
     readonly created: Date;
 
+    @Expose(Groups.PROFILE)
     @Column({ type: "int", nullable: true })
     luckynumber: number;
 
-    @Column({ nullable: true})
+    @Expose(Groups.PROFILE)
+    @Column({ nullable: true })
     homepage: string;
 
-    @Expose()
+    @Expose(Groups.USER_PROFILE)
     get displayname(): string {
         return this._displayname ? this._displayname : this.username;
     }

@@ -19,10 +19,10 @@
               <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!displayname.valid && (displayname.dirty || displayname.touched)">
                 <div class="ui bulleted list">
                   <div class="item" *ngIf="displayname.hasError('maxlength')">
-                    Display name can not be longer than 25 characters!
+                    Display name can not be longer than 25 characters
                   </div>
                   <div class="item" *ngIf="displayname.hasError('containsSpace')">
-                    Display name can not contain spaces!
+                    Display name can not contain spaces
                   </div>
                 </div>
               </div>
@@ -33,16 +33,16 @@
               <div class="ui basic red pointing prompt label transition hidden" [class.visible]="!username.valid && (username.dirty || username.touched)">
                 <div class="ui bulleted list">
                   <div class="item" *ngIf="username.hasError('required')">
-                    Username is required!
+                    Username is required
                   </div>
                   <div class="item" *ngIf="username.hasError('pattern')">
-                    Only alphanumeric characters are allowed!
+                    Only alphanumeric characters are allowed
                   </div>
                   <div class="item" *ngIf="username.hasError('minlength')">
-                    Username must be at least 5 characters long!
+                    Username must be at least 5 characters long
                   </div>
                   <div class="item" *ngIf="username.hasError('maxlength')">
-                    Username can not be longer than 25 characters!
+                    Username can not be longer than 25 characters
                   </div>
                 </div>
               </div>
@@ -56,10 +56,10 @@
                     Password is required!
                   </div>
                   <div class="item" *ngIf="password.hasError('minlength')">
-                    Password must be at least 8 characters long!
+                    Password must be at least 8 characters long
                   </div>
                   <div class="item" *ngIf="password.hasError('maxlength')">
-                    Password can not be longer than 64 characters!
+                    Password can not be longer than 64 characters
                   </div>
                 </div>
               </div>

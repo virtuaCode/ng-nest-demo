@@ -1,7 +1,5 @@
 import { Component } from '@nestjs/common';
 import { HttpException } from '@nestjs/core';
-
-import * as bcrypt from "bcrypt";
 import { User } from "../../entities/user.entity";
 import { UserExistsException } from "../../exceptions/user-exists.exception";
 import { Service } from '../../interfaces/service.interface';

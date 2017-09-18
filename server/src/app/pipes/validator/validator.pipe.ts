@@ -2,25 +2,37 @@ import { PipeTransform, Pipe, ArgumentMetadata, HttpStatus } from '@nestjs/commo
 import { HttpException } from "@nestjs/core";
 import { validate } from "class-validator";
 import { ValidationException } from "../../exceptions/validation.exception";
+import { plainToClass } from 'class-transformer';
+
+
 
 @Pipe()
 export class ValidatorPipe implements PipeTransform<any> {
+
+  /**
+   * Converts a plain JavaScript object to a specific class and validates its properties.
+   * 
+   * @throws { ValidationException }
+   */
   public async transform(value, metadata: ArgumentMetadata) {
-    if(metadata.metatype === undefined)
+
+    if (metadata.metatype === undefined)
       throw new Error("Metatype is not defined");
-    
-    const metatype: (new (...args: any[]) => any) = metadata.metatype;
+
+    const metatype = metadata.metatype;
 
     if (!this.toValidate(metatype)) {
       return value;
     }
-    const object = Object.assign(new metatype(), value);
+
+    const object = plainToClass(metatype, value);
     const errors = await validate(object);
+
     if (errors.length > 0) {
       throw new ValidationException();
     }
 
-    return value;
+    return object;
   }
 
   private toValidate(metatype): boolean {

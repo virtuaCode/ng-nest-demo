@@ -1,5 +1,5 @@
 export class ProfileData {
     displayname: string
-    homepage: string
-    luckynumber: number
+    homepage: string | null
+    luckynumber: number | null
 }
