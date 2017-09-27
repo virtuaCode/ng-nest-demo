@@ -1,4 +1,4 @@
-<div class="ui inverted fixed menu">
+<!-- <div class="ui inverted fixed menu">
   <div class="ui container">
     <a class="item header" routerLink="/">
       <img class="logo" src="assets/logo.png" alt="Logo"/>
@@ -25,7 +25,43 @@
       </div>
     </div>
   </div>
-</div>
-<div class="ui main container">
-  <router-outlet></router-outlet>
-</div>
+</div> -->
+
+<header id="header">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-10 col-sm-6 col-md-5"><a href="#"><img src="/assets/logo.png" alt="logo" class="img-responsive initial loading"/></a></div>
+      <div class="col-xs-12 col-sm-6 col-md-7 hidden-xs">
+        <div id="header-info" class="pull-right text-right">
+          <p id="hotline" class="text-default">Kostenlose Hotline: <strong class="text-primary"> <span class="glyphicon glyphicon-earphone"></span>
+              0800 000 00 00</strong></p><small>Rund um die Uhr für Sie erreichbar</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li routerLinkActive="active" routerLink="/home"><a>Home</a></li>
+        <li *ngIf="isLoggedIn | async" routerLinkActive="active" routerLink="/users"><a >Users</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <button *ngIf="!(isLoggedIn | async)" type="button" routerLink="/login" class="btn btn-default navbar-btn">Login</button>
+        <button *ngIf="!(isLoggedIn | async)" type="button" routerLink="/register" class="btn btn-primary navbar-btn">Sign up</button>
+        <li *ngIf="isLoggedIn | async" class="dropdown" dropdown >
+          <a dropdownToggle class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+          <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem"><a class="dropdown-item" routerLink="/settings">Profile</a></li>
+            <li role="menuitem"><a class="dropdown-item" (click)="logout()">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>

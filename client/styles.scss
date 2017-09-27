@@ -1,0 +1,10 @@
+@import 'variables';
+@import '../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+
+.text-primary {
+    color: $brand-primary;
+}
+
+.text-default {
+    color: $brand-default;    
+}

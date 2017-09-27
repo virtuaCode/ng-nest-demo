@@ -8,6 +8,7 @@ import { AppRoutingModule } from "./routing/app-routing.module";
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 
+import { BsDropdownModule } from 'ngx-bootstrap';
 import { SuiModule } from "ng2-semantic-ui";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
@@ -43,7 +44,8 @@ import { PicturesComponent } from './pictures/pictures.component';
     AuthModule,
     HttpClientModule,
     HttpModule,
-    SuiModule
+    SuiModule,
+    BsDropdownModule.forRoot()
   ],
   exports: [
     FormsModule,
