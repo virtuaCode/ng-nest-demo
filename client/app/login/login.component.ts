@@ -7,19 +7,19 @@ import { Validators } from "@angular/forms";
 import { LoginData } from "../login-data";
 import { AuthService } from "../auth.service";
 import { Router, ActivatedRoute } from "@angular/router";
-import { IMessage } from "ng2-semantic-ui";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  loginError: any;
   form: FormGroup;
   username: AbstractControl;
   password: AbstractControl;
+
   redirectUrl: string;
+  alert: null | {type: string, message: string} = null;
 
   constructor(
     private fb: FormBuilder,
@@ -53,14 +53,19 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit({ value, valid }: { value: LoginData, valid: boolean }) {
-    this.loginError = null;
+    this.alert = null;
 
     this.authService.login(value).subscribe(
       (res: boolean) => {
-        if (res)
+        if (res) {
           this.router.navigateByUrl(this.redirectUrl);
+        }
       },
-      async (err: Response) => {this.password.reset(); this.loginError = await err.json();}
+      async (err: Response) => {
+        this.password.reset(); 
+        const error = await err.json();
+        this.alert = {type: "danger", message: error.message};
+      }
     );
   }
 }

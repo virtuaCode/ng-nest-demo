@@ -19,7 +19,8 @@ export class RegisterComponent implements OnInit {
   displayname: AbstractControl;
   username: AbstractControl;
   password: AbstractControl;
-  registerError: any;
+
+  alert: null | {type:string, message:string} = null;
 
   constructor(
     private fb: FormBuilder,
@@ -62,14 +63,20 @@ export class RegisterComponent implements OnInit {
   }
 
   public onSubmit({ value, valid }: { value: UserCreate, valid: boolean }) {
-    this.registerError = null;
+    this.alert = null;
 
     this.authService.register(value).subscribe(
       (res: boolean) => {
         if (res)
           this.router.navigate(["/"]);
       },
-      async (err: Response) => this.registerError = await err.json()
+      async (err: Response) => {
+        const error = await err.json();
+        this.alert = {
+          type:"danger",
+          message: error.message
+        }
+      }
     );
   }
 }

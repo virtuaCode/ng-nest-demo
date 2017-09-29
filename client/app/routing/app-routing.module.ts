@@ -11,22 +11,28 @@ import { LoggedInGuard } from "../loggedin-guard";
 import { SettingsComponent } from "../settings/settings.component";
 import { ProfileComponent } from "../profile/profile.component";
 import { PicturesComponent } from "../pictures/pictures.component";
+import { NavComponent } from '../nav/nav.component';
 
 
 const ROUTES: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent, canActivate: [LoggedInGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [LoggedInGuard] },
-  { path: 'users', component: UserComponent, canActivate: [AuthGuard] },
   {
-    path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], children:
-    [
-      { path: '', redirectTo: '/settings/profile', pathMatch: 'full' },
-      { path: 'profile', component: ProfileComponent },
-      { path: 'pictures', component: PicturesComponent },
+    path: '', component: NavComponent, children: [
+      { path: 'home', component: HomeComponent },
+      { path: 'users', component: UserComponent, canActivate: [AuthGuard] },
+      {
+        path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], children:
+        [
+          { path: '', redirectTo: '/settings/profile', pathMatch: 'full' },
+          { path: 'profile', component: ProfileComponent },
+          { path: 'pictures', component: PicturesComponent },
+        ]
+      }
     ]
-  }
+  },
+
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-<div class="ui grid">
+<!-- <div class="ui grid">
   <div class="four wide column">
     <div class="ui vertical fluid tabular menu">
       <a class="item" routerLinkActive="active" routerLink="/settings/profile">
@@ -10,6 +10,20 @@
     </div>
   </div>
   <div class="twelve wide stretched column">
+    <router-outlet></router-outlet>
+  </div>
+</div> -->
+
+<div class="container">
+  <ul class="nav nav-tabs">
+    <li routerLinkActive="active" routerLink="/settings/profile">
+      <a>Profile</a>
+    </li>
+    <li routerLinkActive="active" routerLink="/settings/pictures">
+      <a>Pictures</a>
+    </li>
+  </ul>
+  <div class="tab-content">
     <router-outlet></router-outlet>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<div class="ui two column container stackable centered grid">
+<!-- <div class="ui two column container stackable centered grid">
   <div class="column">
     <div class="ui segment">
       <div class="ui one column grid">
@@ -41,6 +41,40 @@
             </div>
             <div class="ui divider"></div>
             <button class="ui button primary fluid" type="submit" [disabled]="!form.valid">Log in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="container">
+  <div class="row">
+      <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+        <img class="img-responsive" src="/assets/logo.png" alt="Website Logo">
+        <hr>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <alert *ngIf="alert" [type]="alert.type" dismissable="true">{{alert.message}}</alert>
+          <form (ngSubmit)="onSubmit(form)" [formGroup]="form">
+            <div class="form-group" [class.has-error]="!username.valid && (username.dirty || username.touched)">
+              <input type="text" name="username" formControlName="username" required placeholder="Username" class="form-control">
+              <ng-container *ngIf="!username.valid && (username.dirty || username.touched)">
+                <span class="help-block" *ngIf="username.hasError('required')">Please enter your username!</span>
+              </ng-container>
+            </div>
+            <div class="form-group" [class.has-error]="!password.valid && (password.dirty || password.touched)">
+              <input type="text" name="password" formControlName="password" required placeholder="Password" class="form-control">
+              <ng-container *ngIf="!password.valid && (password.dirty || password.touched)">
+                <span class="help-block" *ngIf="password.hasError('required')">Please enter your password!</span>
+              </ng-container>
+            </div>
+            <hr>
+            <button class="btn btn-primary btn-block" type="submit" [disabled]="!form.valid">Log in</button>
           </form>
         </div>
       </div>

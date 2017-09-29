@@ -11,23 +11,9 @@ import { Router } from "@angular/router";
 
 export class AppComponent implements OnInit {
 
-  title = 'Users'
-
-  isLoggedIn: Observable<boolean>;
-
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) { }
+  constructor(  ) { }
 
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.loggedIn;
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(["/"]);
   }
 }

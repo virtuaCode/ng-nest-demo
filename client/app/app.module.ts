@@ -8,7 +8,7 @@ import { AppRoutingModule } from "./routing/app-routing.module";
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './register/register.component';
 
-import { BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, AlertModule } from 'ngx-bootstrap';
 import { SuiModule } from "ng2-semantic-ui";
 import { HttpModule } from "@angular/http";
 import { HttpClientModule } from '@angular/common/http';
@@ -24,6 +24,7 @@ import { LoggedInGuard } from "./loggedin-guard";
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
 import { PicturesComponent } from './pictures/pictures.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { PicturesComponent } from './pictures/pictures.component';
     HomeComponent,
     SettingsComponent,
     ProfileComponent,
-    PicturesComponent
+    PicturesComponent,
+    NavComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,8 @@ import { PicturesComponent } from './pictures/pictures.component';
     HttpClientModule,
     HttpModule,
     SuiModule,
-    BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    AlertModule.forRoot()
   ],
   exports: [
     FormsModule,
